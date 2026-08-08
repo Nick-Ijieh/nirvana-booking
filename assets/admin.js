@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const dateFilter = document.querySelector("#date-filter");
   const showAllBtn = document.querySelector("#show-all-btn");
+  const showHistoryBtn = document.querySelector("#show-history-btn");
   const showCancelledToggle = document.querySelector("#show-cancelled-toggle");
   const addBookingBtn = document.querySelector("#add-booking-btn");
   const addModal = document.querySelector("#add-modal");
@@ -20,8 +21,9 @@ document.addEventListener("DOMContentLoaded", function () {
   const emptyMsg = document.querySelector("#empty-msg");
   const bookingsBody = document.querySelector("#bookings-body");
 
-  let viewDate = null; // null = "all upcoming"
+  let viewDate = null; // null = "all upcoming" (or full history, see showFullHistory)
   let showCancelled = false;
+  let showFullHistory = false; // when true, past bookings are included too
   let allBookings = [];
 
   /* ---------------- Time helpers (Cape Town, UTC+2) ---------------- */
@@ -117,7 +119,8 @@ document.addEventListener("DOMContentLoaded", function () {
       if (!showCancelled && b.status === "cancelled") return false;
       const bDateKey = capeTownParts(b.start_time).dateKey;
       if (viewDate) return bDateKey === viewDate;
-      return bDateKey >= todayKey; // "all upcoming" = today onward
+      if (showFullHistory) return true; // every booking, past and future
+      return bDateKey >= todayKey; // default "all upcoming" = today onward
     });
 
     if (rows.length === 0) {
@@ -270,7 +273,16 @@ document.addEventListener("DOMContentLoaded", function () {
   });
   showAllBtn.addEventListener("click", function () {
     viewDate = null;
+    showFullHistory = false;
     dateFilter.value = "";
+    showHistoryBtn.textContent = "Show Full History";
+    renderTable();
+  });
+  showHistoryBtn.addEventListener("click", function () {
+    viewDate = null;
+    dateFilter.value = "";
+    showFullHistory = !showFullHistory;
+    showHistoryBtn.textContent = showFullHistory ? "Show Upcoming Only" : "Show Full History";
     renderTable();
   });
   showCancelledToggle.addEventListener("click", function () {
