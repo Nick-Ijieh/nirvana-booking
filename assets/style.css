@@ -1,0 +1,128 @@
+:root{
+  --ivory:#F6F0E6;
+  --stone:#ECE1CE;
+  --card:#FBF8F2;
+  --ink:#2B2420;
+  --ink-soft:#5A5148;
+  --sage:#7C8A6B;
+  --sage-deep:#5C6B4E;
+  --line: rgba(43,36,32,0.14);
+  --danger:#B24B3C;
+}
+*{ box-sizing:border-box; }
+body{
+  margin:0; background:var(--ivory); color:var(--ink);
+  font-family:'Jost', sans-serif; font-weight:400; line-height:1.5;
+}
+h1,h2{ margin:0; font-weight:600; }
+button{ cursor:pointer; font-family:inherit; }
+a{ color:inherit; }
+
+/* ---------- Buttons ---------- */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  padding:11px 20px; font-size:13.5px; border-radius:8px; border:1px solid transparent;
+  transition:all .2s ease;
+}
+.btn-primary{ background:var(--sage); color:#fff; }
+.btn-primary:hover{ background:var(--sage-deep); }
+.btn-outline{ border:1px solid var(--line); color:var(--ink); background:#fff; }
+.btn-outline:hover{ background:var(--stone); }
+.btn-sm{ padding:9px 16px; font-size:13px; }
+.btn-block{ width:100%; }
+.btn-danger{ background:var(--danger); color:#fff; }
+.btn-danger:hover{ background:#8f3a2f; }
+
+/* ---------- Fields ---------- */
+.field{ display:flex; flex-direction:column; gap:6px; margin-bottom:14px; }
+.field label{ font-size:12px; letter-spacing:0.03em; color:var(--ink-soft); text-transform:uppercase; }
+.field input, .field select{
+  width:100%; padding:11px 12px; border:1px solid var(--line); border-radius:8px;
+  background:#fff; font-family:inherit; font-size:14px; color:var(--ink);
+}
+.field input:focus, .field select:focus{ outline:2px solid var(--sage); outline-offset:1px; }
+.field.inline{ flex-direction:row; align-items:center; gap:10px; margin-bottom:0; }
+.field.inline label{ margin:0; white-space:nowrap; }
+.field.inline input{ width:auto; }
+.form-row{ display:flex; gap:14px; }
+.form-row .field{ flex:1; }
+
+/* ---------- Login ---------- */
+.login-wrap{
+  min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px;
+}
+.login-card{
+  background:#fff; border:1px solid var(--line); border-radius:14px;
+  padding:40px 34px; width:100%; max-width:380px;
+}
+.login-card h1{ font-size:22px; }
+.subtitle{ color:var(--ink-soft); font-size:13.5px; margin:4px 0 24px; }
+
+/* ---------- Dashboard ---------- */
+.dashboard{ max-width:1200px; margin:0 auto; padding:30px 24px 60px; }
+.top-bar{ display:flex; align-items:center; justify-content:space-between; margin-bottom:26px; }
+.top-bar h1{ font-size:22px; }
+
+.controls{
+  display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+  background:var(--card); border:1px solid var(--line); border-radius:10px;
+  padding:14px 16px; margin-bottom:20px;
+}
+
+.loading-msg, .empty-msg{ color:var(--ink-soft); font-size:14px; padding:30px 0; text-align:center; }
+
+.table-wrap{ overflow-x:auto; background:#fff; border:1px solid var(--line); border-radius:10px; }
+table{ width:100%; border-collapse:collapse; font-size:13.5px; min-width:900px; }
+th{
+  text-align:left; padding:12px 14px; background:var(--stone); color:var(--ink-soft);
+  font-size:11.5px; text-transform:uppercase; letter-spacing:0.04em; white-space:nowrap;
+}
+td{ padding:12px 14px; border-top:1px solid var(--line); white-space:nowrap; }
+tr.cancelled-row td{ color:var(--ink-soft); text-decoration:line-through; opacity:0.6; }
+
+.badge{
+  display:inline-block; padding:4px 10px; border-radius:999px; font-size:11.5px;
+  letter-spacing:0.02em;
+}
+.badge-confirmed{ background:rgba(124,138,107,0.18); color:var(--sage-deep); }
+.badge-cancelled{ background:rgba(178,75,60,0.14); color:var(--danger); }
+.staff-badge{
+  display:inline-block; padding:3px 9px; border-radius:6px; font-size:12px;
+  background:var(--stone); color:var(--ink);
+}
+
+.error-msg{ color:var(--danger); font-size:13px; margin:8px 0 0; min-height:16px; }
+
+.field-label-standalone{
+  font-size:12px; letter-spacing:0.04em; text-transform:uppercase; color:var(--ink-soft);
+  margin:0 0 12px;
+}
+.admin-slot-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:6px; }
+.admin-slot-btn{
+  padding:10px 6px; border:1px solid var(--sage); border-radius:4px;
+  background:#fff; color:var(--sage-deep); font-family:inherit; font-size:13px; font-weight:500;
+  transition:background .15s ease, color .15s ease;
+}
+.admin-slot-btn:hover{ background:var(--sage); color:#fff; }
+@media (max-width:480px){
+  .admin-slot-grid{ grid-template-columns:repeat(2,1fr); }
+}
+
+/* ---------- Modal ---------- */
+.modal-overlay{
+  position:fixed; inset:0; background:rgba(43,36,32,0.5);
+  display:flex; align-items:center; justify-content:center; padding:20px; z-index:100;
+}
+.modal-card{
+  background:#fff; border-radius:14px; padding:30px; width:100%; max-width:460px;
+  max-height:90vh; overflow-y:auto;
+}
+.modal-actions{ display:flex; justify-content:flex-end; gap:10px; margin-top:10px; }
+
+@media (max-width:640px){
+  .top-bar{ flex-direction:column; align-items:flex-start; gap:12px; }
+  .controls{ flex-direction:column; align-items:stretch; }
+  .controls .field.inline{ flex-direction:column; align-items:flex-start; }
+  #add-booking-btn{ margin-left:0 !important; }
+  .form-row{ flex-direction:column; gap:0; }
+}
