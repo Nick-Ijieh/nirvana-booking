@@ -106,6 +106,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     allBookings = data || [];
     renderTable();
+    renderCharts();
   }
 
   function renderTable() {
@@ -167,6 +168,80 @@ document.addEventListener("DOMContentLoaded", function () {
     const div = document.createElement("div");
     div.textContent = str;
     return div.innerHTML;
+  }
+
+  /* ---------------- Charts ---------------- */
+  let perDayChart = null;
+  let byTreatmentChart = null;
+  const CHART_COLORS = ["#7C8A6B", "#A9824F", "#B24B3C", "#5C6B4E", "#C9A227", "#8A9A7E", "#B9855F", "#6B7A5C"];
+
+  function renderCharts() {
+    const confirmed = allBookings.filter(function (b) { return b.status !== "cancelled"; });
+
+    // ---- Bookings per day (next 14 days from today, Cape Town time) ----
+    const todayKey = todayCapeTownKey();
+    const dayLabels = [];
+    const dayCounts = [];
+    const countsByDate = {};
+    confirmed.forEach(function (b) {
+      const key = capeTownParts(b.start_time).dateKey;
+      countsByDate[key] = (countsByDate[key] || 0) + 1;
+    });
+    for (let i = 0; i < 14; i++) {
+      const d = new Date(todayKey + "T12:00:00Z");
+      d.setUTCDate(d.getUTCDate() + i);
+      const key = d.toISOString().slice(0, 10);
+      const label = `${d.getUTCDate().toString().padStart(2, "0")}/${(d.getUTCMonth() + 1).toString().padStart(2, "0")}`;
+      dayLabels.push(label);
+      dayCounts.push(countsByDate[key] || 0);
+    }
+
+    const perDayCtx = document.querySelector("#chart-per-day").getContext("2d");
+    if (perDayChart) perDayChart.destroy();
+    perDayChart = new Chart(perDayCtx, {
+      type: "bar",
+      data: {
+        labels: dayLabels,
+        datasets: [{ label: "Bookings", data: dayCounts, backgroundColor: "#7C8A6B", borderRadius: 4 }],
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true, ticks: { precision: 0 } } },
+      },
+    });
+
+    // ---- Bookings by treatment (all confirmed bookings, not just upcoming) ----
+    const countsByTreatment = {};
+    confirmed.forEach(function (b) {
+      const name = b.service_name || "Unknown";
+      countsByTreatment[name] = (countsByTreatment[name] || 0) + 1;
+    });
+    const treatmentLabels = Object.keys(countsByTreatment).sort(function (a, b) {
+      return countsByTreatment[b] - countsByTreatment[a];
+    });
+    const treatmentCounts = treatmentLabels.map(function (name) { return countsByTreatment[name]; });
+
+    const byTreatmentCtx = document.querySelector("#chart-by-treatment").getContext("2d");
+    if (byTreatmentChart) byTreatmentChart.destroy();
+    byTreatmentChart = new Chart(byTreatmentCtx, {
+      type: "bar",
+      data: {
+        labels: treatmentLabels,
+        datasets: [{
+          label: "Bookings",
+          data: treatmentCounts,
+          backgroundColor: treatmentLabels.map(function (_, i) { return CHART_COLORS[i % CHART_COLORS.length]; }),
+          borderRadius: 4,
+        }],
+      },
+      options: {
+        indexAxis: "y",
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: { x: { beginAtZero: true, ticks: { precision: 0 } } },
+      },
+    });
   }
 
   async function cancelBooking(id, btn) {
