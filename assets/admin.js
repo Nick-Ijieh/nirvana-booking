@@ -109,6 +109,7 @@ document.addEventListener("DOMContentLoaded", function () {
     allBookings = data || [];
     renderTable();
     renderCharts();
+    document.querySelector("#raw-data-toggle").style.display = "block";
   }
 
   function renderTable() {
@@ -506,6 +507,34 @@ document.addEventListener("DOMContentLoaded", function () {
 
     addModal.style.display = "none";
     loadBookings();
+  });
+
+  /* ---------------- Raw data panel ---------------- */
+  const rawDataToggle = document.querySelector("#raw-data-toggle");
+  const rawDataPanel = document.querySelector("#raw-data-panel");
+  const rawDataClose = document.querySelector("#raw-data-close");
+  const rawDataContent = document.querySelector("#raw-data-content");
+
+  rawDataToggle.addEventListener("click", function () {
+    rawDataContent.textContent = JSON.stringify(allBookings, null, 2);
+    rawDataPanel.style.display = "flex";
+    rawDataToggle.style.display = "none";
+  });
+  rawDataClose.addEventListener("click", function () {
+    rawDataPanel.style.display = "none";
+    rawDataToggle.style.display = "block";
+  });
+
+  /* ---------------- Charts toggle ---------------- */
+  const chartsToggle = document.querySelector("#charts-toggle");
+  const chartsRow = document.querySelector("#charts-row");
+  let chartsOpen = false;
+
+  chartsToggle.addEventListener("click", function () {
+    chartsOpen = !chartsOpen;
+    chartsRow.style.display = chartsOpen ? "grid" : "none";
+    chartsToggle.innerHTML = chartsOpen ? "Bookings Data &#9652;" : "Bookings Data &#9662;";
+    if (chartsOpen) renderCharts(); // canvases can't size correctly while hidden, so redraw on open
   });
 
   checkSession();

@@ -34,7 +34,9 @@
     <button id="logout-btn" class="btn btn-outline btn-sm">Sign Out</button>
   </header>
 
-  <div class="charts-row">
+  <button id="charts-toggle" class="link-toggle">Bookings Data &#9662;</button>
+
+  <div id="charts-row" class="charts-row" style="display:none;">
     <div class="chart-card">
       <h3>Bookings Per Day</h3>
       <canvas id="chart-per-day"></canvas>
@@ -175,6 +177,15 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
 <script src="assets/supabase-config.js"></script>
+<button id="raw-data-toggle" class="raw-data-toggle" style="display:none;">View Raw Data</button>
+<div id="raw-data-panel" class="raw-data-panel" style="display:none;">
+  <div class="raw-data-header">
+    <span>Raw Bookings Data (from Supabase)</span>
+    <button id="raw-data-close" class="btn btn-outline btn-sm">Close</button>
+  </div>
+  <pre id="raw-data-content"></pre>
+</div>
+
 <script src="assets/admin.js"></script>
 </body>
 </html>
