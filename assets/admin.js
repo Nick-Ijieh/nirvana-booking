@@ -342,7 +342,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
   function requiresBothStaff(serviceName) {
-    return serviceName === "Couples Massage";
+    return serviceName === "Couples Massage" || serviceName === "Lovebirds Package";
   }
 
   /* ---------------- Add booking: modal flow ---------------- */
